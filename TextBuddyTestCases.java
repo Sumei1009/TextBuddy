@@ -7,7 +7,6 @@ public class TextBuddyTestCases {
 	@Test
 	public void clearTest() {
 		TextBuddy.fileName = "a.txt";
-		TextBuddy.readFileInLine("a.txt");
 		assertEquals("all content deleted from a.txt", 
 				TextBuddy.executeCommand("clear"));
 		assertEquals(0, TextBuddy.getLineCount());
@@ -16,7 +15,6 @@ public class TextBuddyTestCases {
 	@Test
 	public void addTest() {
 		TextBuddy.fileName = "a.txt";
-		TextBuddy.readFileInLine("a.txt");
 		assertEquals("added to a.txt: \"I love CS!!!\"", TextBuddy.executeCommand("add I love CS!!!"));
 	}
 	
@@ -30,10 +28,6 @@ public class TextBuddyTestCases {
 	@Test
 	public void deleteTest() {
 		TextBuddy.fileName = "a.txt";
-		TextBuddy.readFileInLine("a.txt");
 		assertEquals("deleted from a.txt: \"I love CS!!!\"", TextBuddy.executeCommand("delete 1"));
 	}
-	
-	
-	
 }

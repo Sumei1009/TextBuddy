@@ -17,28 +17,28 @@ public class TextBuddy {
 	private static final String MESSAGE_EMPTY = "%1$s is empty";
 	private static final String MESSAGE_INVALID = "Invalid instruction";
 	private static final String MESSAGE_NONE_ROW = "There is not row %1$s";
+	private static final String MESSAGE_SUCCESSFUL_WRITE_INTO_FILE = "Successfully write into the file";
+	private static final String MESSAGE_INVALID_ROW_NUMBER = "Unrecognized row number";
 
-	// for reading the command from the users.
+	private static final int DELETECOMMANDPARAMETERS = 2;
+
 	private static Scanner scanner = new Scanner(System.in);
-	// To save the text content
-	private static ArrayList<String> line = new ArrayList<String>();
-
+	private static ArrayList<String> textBuffer = new ArrayList<String>();
 	public static String fileName;
-	
+
 	enum Command {
 		ADD_TEXT, DELETE_TEXT, DISPLAY, CLEAR, INVALID, EXIT
 	}
 
 	/*
-	 * Assumptions: 1.only txt file will be considered valid. 2. only delete,
-	 * add, display, clear and exit commands are considered valid command. 3.
-	 * The file can be saved to the disk only after the user exits.
+	 * Assumptions: 1. only delete, add, display, clear and exit commands are
+	 * considered valid command. 2. The file can be saved to the disk only after
+	 * the user exits.
 	 */
-
 
 	public static void main(String args[]) {
 		fileName = args[0];
-		//fileName = removeFirstWord(scanner.nextLine().trim());
+		fileName = removeFirstWord(scanner.nextLine().trim());
 		prepareFileForUse(fileName);
 		showToUser(String.format(MASSAGE_WELCOME, fileName));
 		while (true) {
@@ -57,7 +57,7 @@ public class TextBuddy {
 				e.printStackTrace();
 			}
 		}
-		line = readFileInLine(fileName);
+		textBuffer = readFileInLine(fileName);
 	}
 
 	private static void showToUser(String text) {
@@ -69,7 +69,6 @@ public class TextBuddy {
 		String userCommand = scanner.nextLine().trim();
 		return userCommand;
 	}
-
 
 	public static String executeCommand(String userCommand) {
 
@@ -95,16 +94,11 @@ public class TextBuddy {
 			exit(userCommand);
 			System.exit(0);
 		default:
-			// throw an error if the command is not recognized
 			throw new Error(MESSAGE_INVALID);
 		}
 	}
 
-	/*
-	 * Different types of command execution.Lower level
-	 */
-
-	private static void exit(String userCommand) {
+	private static String exit(String userCommand) {
 		BufferedWriter writer = null;
 		try {
 			writer = new BufferedWriter(new FileWriter(fileName));
@@ -114,40 +108,46 @@ public class TextBuddy {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return MESSAGE_SUCCESSFUL_WRITE_INTO_FILE;
 	}
 
 	private static String addText(String userCommand) {
-		line.add(removeFirstWord(userCommand) + "\n");
+
+		textBuffer.add(removeFirstWord(userCommand) + System.lineSeparator());
+
 		return String.format(MESSAGE_ADDED, fileName,
 				removeFirstWord(userCommand));
 	}
 
 	private static String deleteText(String userCommand) {
+
 		String[] parameters = splitParameters(userCommand);
-		if (parameters.length != 2) {
+
+		if (parameters.length != DELETECOMMANDPARAMETERS) {
 			return MESSAGE_INVALID;
 		}
+
 		String deleteRow = getLastWord(userCommand).trim();
 
 		int rowNumber = 0;
 		try {
 			rowNumber = Integer.parseInt(deleteRow);
 		} catch (NumberFormatException e) {
-			return "Unrecognized row number.";
+			return MESSAGE_INVALID_ROW_NUMBER;
 		}
 
-		if (rowNumber > line.size()) {
+		if (rowNumber > textBuffer.size()) {
 			return String.format(MESSAGE_NONE_ROW, deleteRow);
 		}
 
-		String deletedRow = line.get(rowNumber - 1);
-		line.remove(rowNumber - 1);
+		String deletedRow = textBuffer.get(rowNumber - 1);
+		textBuffer.remove(rowNumber - 1);
 		return String.format(MESSAGE_DELETED, fileName, deletedRow.trim());
 	}
 
 	private static String display(String userCommand) {
 		String displayContent = "";
-		if (line.size() == 0) {
+		if (textBuffer.size() == 0) {
 			return String.format(MESSAGE_EMPTY, fileName);
 		} else {
 			displayContent = convertLineToString();
@@ -156,19 +156,15 @@ public class TextBuddy {
 	}
 
 	private static String clear(String userCommand) {
-		line.clear();
+		textBuffer.clear();
 		return String.format(MESSAGE_CLEAR, fileName,
 				removeFirstWord(userCommand.trim()));
 	}
 
-	/*
-	 * The reader can go to the next level of abstraction by reading the methods
-	 * (given below) that is referenced by the method above.
-	 */
-
 	private static Command determineCommandType(String commandTypeString) {
-		if (commandTypeString == null)
+		if (commandTypeString == null){
 			throw new Error("command type string cannot be null!");
+		}
 
 		if (commandTypeString.equalsIgnoreCase("add")) {
 			return Command.ADD_TEXT;
@@ -191,7 +187,7 @@ public class TextBuddy {
 			BufferedReader reader = new BufferedReader(new FileReader(fileName));
 			String newLine = reader.readLine();
 			while (newLine != null) {
-				line.add(removeFirstWord(newLine).trim() + "\n");
+				line.add(removeFirstWord(newLine).trim() + System.lineSeparator());
 				newLine = reader.readLine();
 			}
 			reader.close();
@@ -205,15 +201,12 @@ public class TextBuddy {
 
 	public static String convertLineToString() {
 		String textString = "";
-		for (int i = 0; i < line.size(); i++) {
-			textString += (i + 1) + ". " + line.get(i);
+		for (int i = 0; i < textBuffer.size(); i++) {
+			textString += (i + 1) + ". " + textBuffer.get(i);
 		}
 		return textString;
 	}
 
-	/*
-	 * These level is to deal with the command text.
-	 */
 	private static String removeFirstWord(String userCommand) {
 		return userCommand.replace(getFirstWord(userCommand), "").trim();
 	}
@@ -223,8 +216,8 @@ public class TextBuddy {
 		return commandTypeString;
 	}
 
-	private static String getLastWord(String setUpInstruction) {
-		String[] parameters = splitParameters(setUpInstruction);
+	private static String getLastWord(String userCommand) {
+		String[] parameters = splitParameters(userCommand);
 		int length = parameters.length;
 		String commandTypeString = parameters[length - 1].trim();
 		return commandTypeString;
@@ -234,8 +227,8 @@ public class TextBuddy {
 		String[] parameters = commandParametersString.trim().split("\\s+");
 		return parameters;
 	}
-	
-	public static int getLineCount(){
-		return line.size();
+
+	public static int getLineCount() {
+		return textBuffer.size();
 	}
 }

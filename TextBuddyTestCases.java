@@ -46,6 +46,17 @@ public class TextBuddyTestCases {
 				+ "3. You love CS!!!";
 		assertEquals(expected, TextBuddy.executeCommand("display"));
 
+		assertEquals("added to a.txt: \"Boom Shakalaka\"",
+				TextBuddy.executeCommand("add Boom Shakalaka"));
+
+		String expected2 = "1. Boom Shakalaka" + System.lineSeparator()
+				+ "2. He loves CS!!!" + System.lineSeparator()
+				+ "3. I love CS!!!" + System.lineSeparator()
+				+ "4. You love CS!!!";
+		
+		assertEquals("Successully sorted", TextBuddy.executeCommand("sort"));
+
+		assertEquals(expected2, TextBuddy.executeCommand("display"));
 	}
 
 }

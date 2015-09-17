@@ -77,11 +77,10 @@ public class TextBuddy {
 	}
 
 	public static String executeCommand(String userCommand) {
-
 		if (userCommand.trim().equals("")) {
 			return MESSAGE_INVALID;
 		}
-
+		
 		String commandTypeString = getFirstWord(userCommand);
 		Command commandType = determineCommandType(commandTypeString);
 
@@ -120,7 +119,6 @@ public class TextBuddy {
 	}
 
 	private static String addText(String userCommand) {
-
 		textBuffer.add(removeFirstWord(userCommand) + System.lineSeparator());
 
 		return String.format(MESSAGE_ADDED, fileName,

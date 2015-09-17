@@ -59,4 +59,23 @@ public class TextBuddyTestCases {
 		assertEquals(expected2, TextBuddy.executeCommand("display"));
 	}
 
+	@Test
+	public void searchTest() {
+		TextBuddy.fileName = "a.txt";
+		TextBuddy.readFileInLine("a.txt");
+		
+		assertEquals("added to a.txt: \"I love CS!!!\"",
+				TextBuddy.executeCommand("add I love CS!!!"));
+		
+		assertEquals("added to a.txt: \"You love CS!!!\"",
+				TextBuddy.executeCommand("add You love CS!!!"));
+
+		assertEquals("added to a.txt: \"He loves CS!!!\"",
+				TextBuddy.executeCommand("add He loves CS!!!"));
+		
+		String expected = "1. I love CS!!!" + System.lineSeparator()
+				+ "2. You love CS!!!" + System.lineSeparator();
+		
+		assertEquals(expected, TextBuddy.executeCommand("search love"));
+	}
 }

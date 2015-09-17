@@ -31,7 +31,7 @@ public class TextBuddy {
 	public static String fileName = null;
 
 	enum Command {
-		ADD_TEXT, DELETE_TEXT, DISPLAY, CLEAR, SORT, INVALID, EXIT
+		ADD_TEXT, DELETE_TEXT, DISPLAY, CLEAR, SORT, SEARCH, INVALID, EXIT
 	}
 
 	/*
@@ -97,6 +97,8 @@ public class TextBuddy {
 			return MESSAGE_INVALID;
 		case SORT:
 			return sort(userCommand);
+		case SEARCH:
+			return search(userCommand);
 		case EXIT:
 			exit(userCommand);
 			System.exit(0);
@@ -177,6 +179,12 @@ public class TextBuddy {
 		return MESSAGE_SUCCESSFUL_SORT;
 	}
 
+
+	public static String search(String userCommand) {
+		String[] parameters = splitParameters(userCommand);
+		return null;
+	}
+
 	private static Command determineCommandType(String commandTypeString) {
 		if (commandTypeString == null) {
 			throw new Error("command type string cannot be null!");
@@ -192,7 +200,9 @@ public class TextBuddy {
 			return Command.CLEAR;
 		} else if (commandTypeString.equalsIgnoreCase("sort")) {
 			return Command.SORT;
-		} else if (commandTypeString.equalsIgnoreCase("exit")) {
+		} else if(commandTypeString.equalsIgnoreCase("sort")){
+			return Command.SEARCH;
+		}else if (commandTypeString.equalsIgnoreCase("exit")) {
 			return Command.EXIT;
 		} else {
 			return Command.INVALID;

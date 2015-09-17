@@ -80,7 +80,7 @@ public class TextBuddy {
 		if (userCommand.trim().equals("")) {
 			return MESSAGE_INVALID;
 		}
-		
+
 		String commandTypeString = getFirstWord(userCommand);
 		Command commandType = determineCommandType(commandTypeString);
 
@@ -93,12 +93,12 @@ public class TextBuddy {
 			return display(userCommand);
 		case CLEAR:
 			return clear(userCommand);
-		case INVALID:
-			return MESSAGE_INVALID;
 		case SORT:
 			return sort(userCommand);
 		case SEARCH:
 			return search(userCommand);
+		case INVALID:
+			return MESSAGE_INVALID;
 		case EXIT:
 			exit(userCommand);
 			System.exit(0);
@@ -179,10 +179,17 @@ public class TextBuddy {
 		return MESSAGE_SUCCESSFUL_SORT;
 	}
 
-
 	public static String search(String userCommand) {
 		String[] parameters = splitParameters(userCommand);
-		return null;
+		String keyWord = parameters[1];
+		String searchResult = "";
+		for (int i = 0; i < textBuffer.size(); i++) {
+			if (textBuffer.get(i).contains(keyWord)) {
+				searchResult += (i + 1) + ". " + textBuffer.get(i).trim()
+						+ System.lineSeparator();
+			}
+		}
+		return searchResult;
 	}
 
 	private static Command determineCommandType(String commandTypeString) {
@@ -200,9 +207,9 @@ public class TextBuddy {
 			return Command.CLEAR;
 		} else if (commandTypeString.equalsIgnoreCase("sort")) {
 			return Command.SORT;
-		} else if(commandTypeString.equalsIgnoreCase("sort")){
+		} else if (commandTypeString.equalsIgnoreCase("sort")) {
 			return Command.SEARCH;
-		}else if (commandTypeString.equalsIgnoreCase("exit")) {
+		} else if (commandTypeString.equalsIgnoreCase("search")) {
 			return Command.EXIT;
 		} else {
 			return Command.INVALID;

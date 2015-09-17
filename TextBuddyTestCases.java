@@ -29,6 +29,10 @@ public class TextBuddyTestCases {
 	public void sortTest() {
 		TextBuddy.fileName = "a.txt";
 		TextBuddy.readFileInLine("a.txt");
+		
+		assertEquals("all content deleted from a.txt",
+				TextBuddy.executeCommand("clear"));
+		assertEquals(0, TextBuddy.getLineCount());
 
 		assertEquals("added to a.txt: \"I love CS!!!\"",
 				TextBuddy.executeCommand("add I love CS!!!"));
@@ -63,6 +67,10 @@ public class TextBuddyTestCases {
 	public void searchTest() {
 		TextBuddy.fileName = "a.txt";
 		TextBuddy.readFileInLine("a.txt");
+		
+		assertEquals("all content deleted from a.txt",
+				TextBuddy.executeCommand("clear"));
+		assertEquals(0, TextBuddy.getLineCount());
 		
 		assertEquals("added to a.txt: \"I love CS!!!\"",
 				TextBuddy.executeCommand("add I love CS!!!"));

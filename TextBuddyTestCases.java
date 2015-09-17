@@ -45,6 +45,7 @@ public class TextBuddyTestCases {
 				+ "2. I love CS!!!" + System.lineSeparator()
 				+ "3. You love CS!!!";
 		assertEquals(expected, TextBuddy.executeCommand("display"));
+
 	}
 
 }

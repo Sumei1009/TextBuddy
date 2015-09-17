@@ -6,11 +6,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class TextBuddy {
 
 	private static final String MASSAGE_WELCOME = "Welcome to TextBuddy. %1$s is ready for use";
+	private static final String MASSAGE_ERROR_FILE = "Can't create such file, please key in file name again";
 	private static final String MESSAGE_ADDED = "added to %1$s: \"%2$s\"";
 	private static final String MESSAGE_DELETED = "deleted from %1$s: \"%2$s\"";
 	private static final String MESSAGE_CLEAR = "all content deleted from %1$s";
@@ -18,16 +21,17 @@ public class TextBuddy {
 	private static final String MESSAGE_INVALID = "Invalid instruction";
 	private static final String MESSAGE_NONE_ROW = "There is not row %1$s";
 	private static final String MESSAGE_SUCCESSFUL_WRITE_INTO_FILE = "Successfully write into the file";
+	private static final String MESSAGE_SUCCESSFUL_SORT = "Successully sorted";
 	private static final String MESSAGE_INVALID_ROW_NUMBER = "Unrecognized row number";
 
 	private static final int DELETECOMMANDPARAMETERS = 2;
 
 	private static Scanner scanner = new Scanner(System.in);
 	private static ArrayList<String> textBuffer = new ArrayList<String>();
-	public static String fileName;
+	public static String fileName = null;
 
 	enum Command {
-		ADD_TEXT, DELETE_TEXT, DISPLAY, CLEAR, INVALID, EXIT
+		ADD_TEXT, DELETE_TEXT, DISPLAY, CLEAR, SORT, INVALID, EXIT
 	}
 
 	/*
@@ -48,13 +52,15 @@ public class TextBuddy {
 		}
 	}
 
-	private static void prepareFileForUse(String fileName) {
-		File file = new File(fileName);
+	private static void prepareFileForUse(String localFileName) {
+		File file = new File(localFileName);
 		if (!file.exists()) {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				e.printStackTrace();
+				showToUser(MASSAGE_ERROR_FILE);
+				fileName = scanner.nextLine().trim();
+				prepareFileForUse(fileName);
 			}
 		}
 		textBuffer = readFileInLine(fileName);
@@ -90,6 +96,8 @@ public class TextBuddy {
 			return clear(userCommand);
 		case INVALID:
 			return MESSAGE_INVALID;
+		case SORT:
+			return sort(userCommand);
 		case EXIT:
 			exit(userCommand);
 			System.exit(0);
@@ -161,8 +169,18 @@ public class TextBuddy {
 				removeFirstWord(userCommand.trim()));
 	}
 
+	public static String sort(String userCommand) {
+		Collections.sort(textBuffer, new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				return o1.compareToIgnoreCase(o2);
+			}
+		});
+		return MESSAGE_SUCCESSFUL_SORT;
+	}
+
 	private static Command determineCommandType(String commandTypeString) {
-		if (commandTypeString == null){
+		if (commandTypeString == null) {
 			throw new Error("command type string cannot be null!");
 		}
 
@@ -174,6 +192,8 @@ public class TextBuddy {
 			return Command.DISPLAY;
 		} else if (commandTypeString.equalsIgnoreCase("clear")) {
 			return Command.CLEAR;
+		} else if (commandTypeString.equalsIgnoreCase("sort")) {
+			return Command.SORT;
 		} else if (commandTypeString.equalsIgnoreCase("exit")) {
 			return Command.EXIT;
 		} else {
@@ -187,7 +207,8 @@ public class TextBuddy {
 			BufferedReader reader = new BufferedReader(new FileReader(fileName));
 			String newLine = reader.readLine();
 			while (newLine != null) {
-				line.add(removeFirstWord(newLine).trim() + System.lineSeparator());
+				line.add(removeFirstWord(newLine).trim()
+						+ System.lineSeparator());
 				newLine = reader.readLine();
 			}
 			reader.close();

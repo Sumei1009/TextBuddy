@@ -207,9 +207,9 @@ public class TextBuddy {
 			return Command.CLEAR;
 		} else if (commandTypeString.equalsIgnoreCase("sort")) {
 			return Command.SORT;
-		} else if (commandTypeString.equalsIgnoreCase("sort")) {
-			return Command.SEARCH;
 		} else if (commandTypeString.equalsIgnoreCase("search")) {
+			return Command.SEARCH;
+		} else if (commandTypeString.equalsIgnoreCase("exit")) {
 			return Command.EXIT;
 		} else {
 			return Command.INVALID;

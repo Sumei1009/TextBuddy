@@ -29,7 +29,7 @@ public class TextBuddyTestCases {
 	public void sortTest() {
 		TextBuddy.fileName = "a.txt";
 		TextBuddy.readFileInLine("a.txt");
-		
+
 		assertEquals("all content deleted from a.txt",
 				TextBuddy.executeCommand("clear"));
 		assertEquals(0, TextBuddy.getLineCount());
@@ -57,7 +57,7 @@ public class TextBuddyTestCases {
 				+ "2. He loves CS!!!" + System.lineSeparator()
 				+ "3. I love CS!!!" + System.lineSeparator()
 				+ "4. You love CS!!!";
-		
+
 		assertEquals("Successully sorted", TextBuddy.executeCommand("sort"));
 
 		assertEquals(expected2, TextBuddy.executeCommand("display"));
@@ -67,23 +67,24 @@ public class TextBuddyTestCases {
 	public void searchTest() {
 		TextBuddy.fileName = "a.txt";
 		TextBuddy.readFileInLine("a.txt");
-		
+
 		assertEquals("all content deleted from a.txt",
 				TextBuddy.executeCommand("clear"));
 		assertEquals(0, TextBuddy.getLineCount());
-		
+
 		assertEquals("added to a.txt: \"I love CS!!!\"",
 				TextBuddy.executeCommand("add I love CS!!!"));
-		
+
 		assertEquals("added to a.txt: \"You love CS!!!\"",
 				TextBuddy.executeCommand("add You love CS!!!"));
 
 		assertEquals("added to a.txt: \"He loves CS!!!\"",
 				TextBuddy.executeCommand("add He loves CS!!!"));
-		
+
 		String expected = "1. I love CS!!!" + System.lineSeparator()
-				+ "2. You love CS!!!" + System.lineSeparator();
-		
+				+ "2. You love CS!!!" + System.lineSeparator()
+				+ "3. He loves CS!!!" + System.lineSeparator();
+
 		assertEquals(expected, TextBuddy.executeCommand("search love"));
 	}
 }

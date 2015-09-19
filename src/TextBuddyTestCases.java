@@ -1,17 +1,33 @@
 import static org.junit.Assert.*;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class TextBuddyTestCases {
 
-	@Test
-	public void executeCommandTest() {
+	@BeforeClass
+	public static void oneTimeSetUp(){
 		TextBuddy.fileName = "a.txt";
-		TextBuddy.readFileInLine("a.txt");
-
+	}
+	
+	@Before
+	public void setUp(){
 		assertEquals("all content deleted from a.txt",
 				TextBuddy.executeCommand("clear"));
 		assertEquals(0, TextBuddy.getLineCount());
+	}
+	
+	@After
+	public void tearDown(){
+		assertEquals("all content deleted from a.txt",
+				TextBuddy.executeCommand("clear"));
+		assertEquals(0, TextBuddy.getLineCount());
+	}
+	
+	@Test
+	public void executeCommandTest() {
 
 		assertEquals("added to a.txt: \"I love CS!!!\"",
 				TextBuddy.executeCommand("add I love CS!!!"));
@@ -27,12 +43,6 @@ public class TextBuddyTestCases {
 
 	@Test
 	public void sortTest() {
-		TextBuddy.fileName = "a.txt";
-		TextBuddy.readFileInLine("a.txt");
-
-		assertEquals("all content deleted from a.txt",
-				TextBuddy.executeCommand("clear"));
-		assertEquals(0, TextBuddy.getLineCount());
 
 		assertEquals("added to a.txt: \"I love CS!!!\"",
 				TextBuddy.executeCommand("add I love CS!!!"));
@@ -65,12 +75,6 @@ public class TextBuddyTestCases {
 
 	@Test
 	public void searchTest() {
-		TextBuddy.fileName = "a.txt";
-		TextBuddy.readFileInLine("a.txt");
-
-		assertEquals("all content deleted from a.txt",
-				TextBuddy.executeCommand("clear"));
-		assertEquals(0, TextBuddy.getLineCount());
 
 		assertEquals("added to a.txt: \"I love CS!!!\"",
 				TextBuddy.executeCommand("add I love CS!!!"));

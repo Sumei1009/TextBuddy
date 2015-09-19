@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -7,13 +9,17 @@ import org.junit.Test;
 
 public class TextBuddyTestCases {
 
+	static ArrayList<String> expected;
+	
 	@BeforeClass
 	public static void oneTimeSetUp(){
 		TextBuddy.fileName = "a.txt";
+		expected = new ArrayList<String>();
 	}
 	
 	@Before
 	public void setUp(){
+		expected.clear();
 		assertEquals("all content deleted from a.txt",
 				TextBuddy.executeCommand("clear"));
 		assertEquals(0, TextBuddy.getLineCount());
@@ -21,13 +27,14 @@ public class TextBuddyTestCases {
 	
 	@After
 	public void tearDown(){
+		expected.clear();
 		assertEquals("all content deleted from a.txt",
 				TextBuddy.executeCommand("clear"));
 		assertEquals(0, TextBuddy.getLineCount());
 	}
 	
 	@Test
-	public void executeCommandTest() {
+	public void originalFunctionalityTest() {
 
 		assertEquals("added to a.txt: \"I love CS!!!\"",
 				TextBuddy.executeCommand("add I love CS!!!"));
@@ -73,6 +80,22 @@ public class TextBuddyTestCases {
 		assertEquals(expected2, TextBuddy.executeCommand("display"));
 	}
 
+	@Test 
+	public void sortTest2(){
+		expected.add("A" + System.lineSeparator());
+		expected.add("B" + System.lineSeparator());
+		expected.add("C" + System.lineSeparator());
+		expected.add("D" + System.lineSeparator());
+		expected.add("E" + System.lineSeparator());
+		TextBuddy.executeCommand("add A");
+		TextBuddy.executeCommand("add C");
+		TextBuddy.executeCommand("add E");
+		TextBuddy.executeCommand("add B");
+		TextBuddy.executeCommand("add D");
+		TextBuddy.executeCommand("sort");
+		assertEquals(expected, TextBuddy.getLine());
+	}
+	
 	@Test
 	public void searchTest() {
 
@@ -84,7 +107,10 @@ public class TextBuddyTestCases {
 
 		assertEquals("added to a.txt: \"He loves CS!!!\"",
 				TextBuddy.executeCommand("add He loves CS!!!"));
-
+		
+		assertEquals("added to a.txt: \"Boom Shakalaka\"",
+				TextBuddy.executeCommand("add Boom Shakalaka"));
+		
 		String expected = "1. I love CS!!!" + System.lineSeparator()
 				+ "2. You love CS!!!" + System.lineSeparator()
 				+ "3. He loves CS!!!" + System.lineSeparator();

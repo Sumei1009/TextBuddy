@@ -181,7 +181,7 @@ public class TextBuddy {
 
 	public static String search(String userCommand) {
 		String[] parameters = splitParameters(userCommand);
-		String keyWord = parameters[1];
+		String keyWord = parameters[1].trim();
 		String searchResult = "";
 		for (int i = 0; i < textBuffer.size(); i++) {
 			if (textBuffer.get(i).contains(keyWord)) {
@@ -266,5 +266,9 @@ public class TextBuddy {
 
 	public static int getLineCount() {
 		return textBuffer.size();
+	}
+	
+	public static ArrayList<String> getLine(){
+		return textBuffer;
 	}
 }

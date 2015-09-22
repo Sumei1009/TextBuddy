@@ -21,7 +21,7 @@ public class TextBuddy {
 	private static final String MESSAGE_INVALID = "Invalid instruction";
 	private static final String MESSAGE_NONE_ROW = "There is not row %1$s";
 	private static final String MESSAGE_SUCCESSFUL_WRITE_INTO_FILE = "Successfully write into the file";
-	private static final String MESSAGE_SUCCESSFUL_SORT = "Successully sorted";
+	private static final String MESSAGE_SUCCESSFUL_SORT = "Successfully sorted";
 	private static final String MESSAGE_INVALID_ROW_NUMBER = "Unrecognized row number";
 
 	private static final int DELETECOMMANDPARAMETERS = 2;
